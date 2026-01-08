@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anu Photostudio</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+  <style>
+    body { margin:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f0f2f5; }
+    
+    /* Layout */
+    header { background:#111; color:#fff; padding:40px 20px; text-align:center; }
+    nav { background:#222; padding:10px; text-align:center; position: sticky; top: 0; z-index: 100; }
+    nav a { color:#fff; margin:0 15px; text-decoration:none; font-weight:bold; font-size: 1.1rem; }
+    nav a:hover { color: #ffcc00; }
+    
+    section { padding:60px 20px; max-width:1000px; margin:auto; }
+    h2 { text-align: center; color: #333; margin-bottom: 30px; font-size: 2rem; }
+    
+    /* Services Grid */
+    .services { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
+    .card { border:none; padding:30px; border-radius:12px; text-align:center; background:#fff; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+    .card:hover { transform: translateY(-5px); }
+    
+    /* Forms & Buttons */
+    .cta { background:#e9ecef; text-align:center; border-radius: 12px; }
+    button { padding:12px 24px; background:#111; color:#fff; border:none; border-radius: 5px; cursor:pointer; font-size: 1rem; transition: background 0.3s; }
+    button:hover { background: #333; }
+    input, textarea { width:100%; padding:12px; margin:8px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+    
+    footer { background:#111; color:#fff; text-align:center; padding:20px; margin-top: 40px; }
+
+    /* Login Page Specifics */
+    #loginPage { min-height:100vh; display:flex; align-items:center; justify-content:center; background:#111; flex-direction: column; }
+    .login-box { background:#222; color:#fff; padding:40px; border-radius:10px; width:90%; max-width:400px; text-align:center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    .status-badge { background: #ffcc00; color: #000; padding: 5px 10px; border-radius: 4px; font-weight: bold; margin-bottom: 15px; display: inline-block; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage">
+  <div class="login-box">
+    <!-- Status Indicator -->
+    <div id="dbStatus"></div>
+
+    <h2>Anu Photostudio</h2>
+    <p style="color:#aaa; margin-bottom:20px;">Please login to continue</p>
+    
+    <input type="email" id="email" placeholder="Email Address" />
+    <input type="password" id="password" placeholder="Password" />
+    
+    <div style="margin-top:20px;">
+      <button onclick="handleLogin()">Login</button>
+      <button onclick="handleSignup()" style="background:#444;">Create Account</button>
+    </div>
+    
+    <p id="msg" style="color:#ff6b6b; margin-top:15px; min-height: 20px;"></p>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="mainContent" style="display:none;">
+
+<header>
+  <h1>Anu Photostudio</h1>
+  <p>Capturing your moments beautifully</p>
+</header>
+
+<nav>
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#order">Order</a>
+  <a href="#contact">Contact</a>
+  <a href="#" onclick="logout()" style="color:#ff6b6b;">Logout</a>
+</nav>
+
+<section id="about">
+  <h2>About Us</h2>
+  <p style="text-align:center; font-size:1.2rem; line-height:1.6;">
+    ಅನು ಫೋಟೋ ಸ್ಟುಡಿಯೋ ನಿಮ್ಮ ಜೀವನದ ಅಮೂಲ್ಯ ಕ್ಷಣಗಳನ್ನು ಸುಂದರವಾಗಿ ಹಿಡಿದಿಡುತ್ತದೆ.<br>
+    We specialize in making your memories last a lifetime with high-quality photography and videography services.
+  </p>
+</section>
+
+<section id="services">
+  <h2>Our Services</h2>
+  <div class="services">
+    <div class="card">
+      <h3>💍 Wedding</h3>
+      <p>Cinematic wedding films and candid photography.</p>
+    </div>
+    <div class="card">
+      <h3>👤 Portrait</h3>
+      <p>Professional headshots and modeling portfolios.</p>
+    </div>
+    <div class="card">
+      <h3>🎉 Events</h3>
+      <p>Birthday parties, naming ceremonies, and corporate events.</p>
+    </div>
+    <div class="card">
+      <h3>🖨️ Printing</h3>
+      <p>High-quality album design and photo printing.</p>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <h2>Gallery</h2>
+  <div class="services">
+    <div class="card" style="background:#eee; height:200px; display:flex; align-items:center; justify-content:center; font-style:italic;">Photo 1 Placeholder</div>
+    <div class="card" style="background:#eee; height:200px; display:flex; align-items:center; justify-content:center; font-style:italic;">Photo 2 Placeholder</div>
+    <div class="card" style="background:#eee; height:200px; display:flex; align-items:center; justify-content:center; font-style:italic;">Photo 3 Placeholder</div>
+  </div>
+</section>
+
+<section id="order" class="cta">
+  <h2>Place Order / Enquiry</h2>
+  <div style="max-width: 500px; margin: auto;">
+    <input id="custName" placeholder="Your Name" />
+    <input id="custEmail" placeholder="Your Email" />
+    <textarea id="details" rows="4" placeholder="Describe your event or order requirements..."></textarea>
+    <button onclick="sendOrder()" style="width:100%; margin-top:10px;">Send via WhatsApp</button>
+  </div>
+</section>
+
+<section id="contact" style="text-align:center;">
+  <h2>Contact Us</h2>
+  <p>We are just a call away!</p>
+  <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">
+    <a href="tel:9380876045" style="text-decoration:none;">
+      <button>📞 Call Now</button>
+    </a>
+    <a href="https://wa.me/919380876045" target="_blank" style="text-decoration:none;">
+      <button style="background:#25D366;">💬 WhatsApp</button>
+    </a>
+  </div>
+</section>
+
+<footer>© 2026 Anu Photostudio - All Rights Reserved</footer>
+
+</div>
+
+<script>
+  // -----------------------------------------------------------------------
+  // CONFIGURATION SECTION
+  // -----------------------------------------------------------------------
+  
+  const firebaseConfig = {
+    apiKey: "PASTE_YOUR_API_KEY_HERE",
+    authDomain: "PASTE_YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "PASTE_YOUR_PROJECT_ID",
+    storageBucket: "PASTE_YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "PASTE_YOUR_SENDER_ID",
+    appId: "PASTE_YOUR_APP_ID"
+  };
+
+  // -----------------------------------------------------------------------
+  // LOGIC: DETECT IF CONFIG IS MISSING
+  // -----------------------------------------------------------------------
+  
+  let isDemoMode = false;
+  let auth = null;
+
+  // Check if user still has the placeholder text
+  if (firebaseConfig.apiKey === "PASTE_YOUR_API_KEY_HERE") {
+    isDemoMode = true;
+    document.getElementById("dbStatus").innerHTML = "<span class='status-badge'>⚠️ DEMO MODE (No Database)</span>";
+    console.warn("Running in Demo Mode because Firebase keys are missing.");
+  } else {
+    // Initialize real Firebase
+    firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth();
+    
+    // Listen for login state
+    auth.onAuthStateChanged((user)=>{
+      if(user){
+        showApp();
+      }
+    });
+  }
+
+  // -----------------------------------------------------------------------
+  // FUNCTIONS
+  // -----------------------------------------------------------------------
+
+  function handleLogin(){
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    if(isDemoMode) {
+      // Fake Login for Demo
+      if(email && password) {
+        showApp();
+      } else {
+        document.getElementById("msg").innerText = "Demo: Enter any email/password to continue.";
+      }
+    } else {
+      // Real Firebase Login
+      auth.signInWithEmailAndPassword(email, password)
+      .then(()=>{ console.log("Logged in"); })
+      .catch((error)=>{ document.getElementById("msg").innerText = error.message; });
+    }
+  }
+
+  function handleSignup(){
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    if(isDemoMode) {
+      alert("This is a demo! Account 'created' locally. Please login.");
+    } else {
+      auth.createUserWithEmailAndPassword(email, password)
+      .then(()=>{ alert("Account Created! You are logged in."); })
+      .catch((error)=>{ document.getElementById("msg").innerText = error.message; });
+    }
+  }
+
+  function logout() {
+    if(isDemoMode) {
+      location.reload();
+    } else {
+      auth.signOut().then(() => {
+        location.reload();
+      });
+    }
+  }
+
+  function showApp() {
+    document.getElementById("loginPage").style.display='none';
+    document.getElementById("mainContent").style.display='block';
+    window.scrollTo(0,0);
+  }
+
+  function sendOrder(){
+    const name = document.getElementById("custName").value;
+    const emailVal = document.getElementById("custEmail").value;
+    const detailVal = document.getElementById("details").value;
+    
+    if(!name || !detailVal) {
+      alert("Please fill in your Name and Details");
+      return;
+    }
+
+    // Proper formatting for WhatsApp URL
+    const message = `*New Order Request*%0A------------------%0A👤 *Name:* ${name}%0A📧 *Email:* ${emailVal}%0A📝 *Details:* ${detailVal}`;
+    const url = `https://wa.me/919380876045?text=${message}`;
+    
+    window.open(url, '_blank');
+  }
+</script>
+
+</body>
+</html>
